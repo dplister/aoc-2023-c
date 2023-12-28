@@ -19,3 +19,25 @@ char *string_from_file(char const *filename){
 	}
 	return out;
 }
+
+bool in_list(char input, const char *tokens) {
+	while (*tokens != '\0') {
+		if (*tokens == input)
+			return true;
+		tokens++;
+	}
+	return false;
+}
+
+char* skip_to(char *input, const char *tokens) {
+	while (*input != '\0' && !in_list(*input, tokens)) {
+		input++;
+	}
+	return input;
+}
+
+char* skip_to_number(char *input) {
+	while (*input != '\0' && (*input < '0' || *input > '9'))
+		input++;
+	return input;
+}
