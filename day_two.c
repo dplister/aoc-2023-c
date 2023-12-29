@@ -5,32 +5,10 @@
 
 typedef char* string;
 
-static string GAME_DELIM = ":";
-static string COLOUR_DELIM = "bgr"; 
-static string DRAW_DELIM = ",;\n";
-static string LINE_DELIM = "\n";
-
-bool in_list(char input, char *tokens) {
-	while (*tokens != '\0') {
-		if (*tokens == input)
-			return true;
-		tokens++;
-	}
-	return false;
-}
-
-char* skip_to(char* input, char* tokens) {
-	while (*input != '\0' && !in_list(*input, tokens)) {
-		input++;
-	}
-	return input;
-}
-
-char* skip_to_number(char *input) {
-	while (*input != '\0' && (*input < '0' || *input > '9'))
-		input++;
-	return input;
-}
+const string GAME_DELIM = ":";
+const string COLOUR_DELIM = "bgr"; 
+const string DRAW_DELIM = ",;\n";
+const string LINE_DELIM = "\n";
 
 int count_valid_games(char *input) {
 	int valids = 0;
@@ -63,6 +41,50 @@ int count_valid_games(char *input) {
 	return valids;
 }
 
+const char colours[] = { 'b', 'g', 'r' };
+const int colour_amount = 3;
+
+int power_valid_games(char *input) {
+	int total = 0;
+	while (*input != '\0') {
+		// get id
+		input = skip_to_number(input);
+		int id = atoi(input);
+		printf("id: %d\t", id);
+		input = skip_to(input, GAME_DELIM);
+		input++;
+		int max_colours[colour_amount];
+		for (int i = 0;i < colour_amount;i++)
+			max_colours[i] = 0;
+		while (*input != '\0' && !in_list(*input, LINE_DELIM)) {
+			// number
+			int ball_total = atoi(input);
+			// colour
+			input = skip_to(input, colours);
+			printf("%c:%d ", *input, ball_total);
+			int ci = 0;
+			while (colours[ci] != *input) {
+				ci++;
+			}
+			max_colours[ci] = ball_total > max_colours[ci] ? ball_total : max_colours[ci];
+			// semicolon or comma or newline?
+			input = skip_to(input, DRAW_DELIM);
+			if (*input != '\0' && !in_list(*input, LINE_DELIM))
+				input++;
+		}
+		int sub_total = 1;
+		for (int i = 0;i < colour_amount; i++) {
+			printf("max-%c:%d ", colours[i], max_colours[i]);
+			sub_total *= max_colours[i];
+		}
+		printf("\n");
+		total += sub_total;
+		if (*input == '\n')
+			input++;
+	}
+	return total;
+}
+
 int main(int argc, char **argv) {
 	char *contents;
 	if (argc > 2) {
@@ -71,7 +93,7 @@ int main(int argc, char **argv) {
 		contents = string_from_file("day02inp.txt");
 	}
 	if (argc > 1 && argv[1][0] == 'b') {
-		printf("Part B Total: %d\n", count_valid_games(contents));
+		printf("Part B Total: %d\n", power_valid_games(contents));
 	} else {
 		printf("Part A Total: %d\n", count_valid_games(contents));
 	}

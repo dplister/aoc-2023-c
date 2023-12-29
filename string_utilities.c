@@ -41,3 +41,22 @@ char* skip_to_number(char *input) {
 		input++;
 	return input;
 }
+
+int count_token(char *input, char token) {
+	int count = 0;
+	char *c = input;
+	while (*c != '\0') {
+		if (*c == token)
+			count++;
+		c++;
+	}
+	return count;
+}
+
+int index_of(char *input, char token) {
+	int index = 0;
+	while (input[index] != '\0' && input[index] != token) {
+		index++;
+	}
+	return input[index] == token ? index : -1;
+}
