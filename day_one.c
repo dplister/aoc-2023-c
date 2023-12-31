@@ -6,10 +6,6 @@ typedef char* string;
 
 static string numbers[] = {"one","two","three","four","five","six","seven","eight","nine",NULL };
 
-bool is_digit(char c) {
-	return c >= '0' && c <= '9';
-}
-
 bool is_eol(char c) {
 	return c == '\n' || c == '\0';
 }

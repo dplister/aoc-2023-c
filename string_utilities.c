@@ -29,6 +29,14 @@ bool in_list(char input, const char *tokens) {
 	return false;
 }
 
+bool is_digit(unsigned char c) {
+	return c >= '0' && c <= '9';
+}
+
+bool is_symbol(unsigned char c) {
+	return !is_digit(c) && c != '.';
+}
+
 char* skip_to(char *input, const char *tokens) {
 	while (*input != '\0' && !in_list(*input, tokens)) {
 		input++;

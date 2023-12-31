@@ -1,7 +1,7 @@
 OBJECTS=string_utilities.h string_utilities.c
 CFLAGS = -g -Wall `pkg-config --cflags glib-2.0`
 LDLIBS=`pkg-config --libs glib-2.0`
-CC=c99
+CC=gcc
 binaries=day_one day_two day_three
 
 all: $(binaries)
