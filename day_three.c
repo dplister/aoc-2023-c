@@ -40,7 +40,7 @@ void print_map(int rows, int columns, char map[rows][columns]) {
 	}
 }
 
-int touches(int rows, int columns, char map[rows][columns], int y, int x, int width, bool (*is_kind)(unsigned char c), point found[MAX_POINTS_TOUCHED]) {
+int touches(int rows, int columns, char map[rows][columns], int y, int x, int width, bool (*is_kind)(char c), point found[MAX_POINTS_TOUCHED]) {
 	int minX = x - 1 < 0 ? 0 : x - 1;
 	int maxX = x + width >= columns ? columns - 1 : x + width;
 	int minY = y - 1 < 0 ? 0 : y - 1;
@@ -73,6 +73,8 @@ int touches(int rows, int columns, char map[rows][columns], int y, int x, int wi
 				point p = { .x = i, .y = minY };
 				*found = p;
 				found++;
+				if (total >= MAX_POINTS_TOUCHED)
+					return total;
 				// skip past; count each group once
 				while (i <= maxX && is_kind(map[minY][i]))
 					i++;
@@ -87,6 +89,8 @@ int touches(int rows, int columns, char map[rows][columns], int y, int x, int wi
 				point p = { .x = i, .y = maxY };
 				*found = p;
 				found++;
+				if (total >= MAX_POINTS_TOUCHED)
+					return total;
 				// skip past; count each group once
 				while (i <= maxX && is_kind(map[maxY][i]))
 					i++;
