@@ -25,7 +25,7 @@ int calculate_wins(char *input) {
 		}
 		input = skip_to(input, GAME_TOKENS);
 		while (is_digit(*input)) {
-			
+			input++;
 		}
 	}
 }

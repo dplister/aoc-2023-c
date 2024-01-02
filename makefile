@@ -1,4 +1,3 @@
-OBJECTS=string_utilities.h string_utilities.c list.h list.c
 CFLAGS = -g -Wall `pkg-config --cflags glib-2.0`
 LDLIBS=`pkg-config --libs glib-2.0`
 CC=gcc
@@ -10,7 +9,10 @@ test: $(TESTS)
 day_one: $(OBJECTS)
 day_two: $(OBJECTS)
 day_three: $(OBJECTS)
-list_test: list.h list.c list_test.c
+list: list.h list.c
+	$(CC) $(CFLAGS) list.h list.c -c list.o
+list_test: list
+	$(CC) $(CFLAGS) $(LDLIBS) list.o list_test.c -o list_test
 clean: 
 	rm $(BINARIES)
 	rm $(TESTS)

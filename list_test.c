@@ -11,6 +11,7 @@ typedef struct {
 
 void setup(nfixture *nf, gconstpointer test_data) {
 	nf->ls = new_int_list(5);
+	printf("Setup\n");
 }
 
 void setup_prefilled(nfixture *nf, gconstpointer test_data) {
@@ -23,11 +24,12 @@ void setup_prefilled(nfixture *nf, gconstpointer test_data) {
 }
 
 void teardown(nfixture *nf, gconstpointer test_data) {
-	printf("FREE\n");
+	printf("Teardown\n");
 	free_int_list(nf->ls);
 }
 
 void test_insert_empty(nfixture *nf, gconstpointer ignored) {
+	printf("Run\n");
 	bool response = insert_number_sorted(1, nf->ls);
 	g_assert(response);
 	g_assert(nf->ls->curr_len == 1);
