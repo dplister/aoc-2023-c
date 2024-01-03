@@ -11,7 +11,6 @@ typedef struct {
 
 void setup(nfixture *nf, gconstpointer test_data) {
 	nf->ls = new_int_list(5);
-	printf("Setup\n");
 }
 
 void setup_prefilled(nfixture *nf, gconstpointer test_data) {
@@ -24,12 +23,23 @@ void setup_prefilled(nfixture *nf, gconstpointer test_data) {
 }
 
 void teardown(nfixture *nf, gconstpointer test_data) {
-	printf("Teardown\n");
 	free_int_list(nf->ls);
 }
 
+void test_create_list(nfixture *nf, gconstpointer ignored) {
+	const int size = 5;
+	int_list *ls = new_int_list(size);
+	g_assert(ls != NULL);
+	for (int i = 0;i < size;i++) {
+		ls->ns[i] = i;
+	}
+	for (int i = 0;i < size;i++) {
+		g_assert(ls->ns[i] == i);
+	}
+	free_int_list(ls);
+}
+
 void test_insert_empty(nfixture *nf, gconstpointer ignored) {
-	printf("Run\n");
 	bool response = insert_number_sorted(1, nf->ls);
 	g_assert(response);
 	g_assert(nf->ls->curr_len == 1);
@@ -59,13 +69,9 @@ void test_insert_start(nfixture *nf, gconstpointer ignored) {
 
 void test_insert_end(nfixture *nf, gconstpointer ignored) {
 	bool response = insert_number_sorted(nf->ls->curr_len, nf->ls);
-	printf("INSERT_END: ");
-	print_int_list(nf->ls);
-	printf("\n");
 	g_assert(response);
 	g_assert(nf->ls->curr_len == nf->ls->max_len);
 	for (int i = 0;i < nf->ls->max_len; i++) {
-		printf("%d -> %d\n", i, nf->ls->ns[i]);
 		g_assert(nf->ls->ns[i] == i);
 	}
 }
@@ -80,6 +86,7 @@ void test_insert_middle(nfixture *nf, gconstpointer ignored) {
 
 int main (int argc, char **argv) {
 	g_test_init(&argc, &argv, NULL);
+	g_test_add("/list/create", nfixture, NULL, NULL, test_create_list, NULL);
 	g_test_add("/list/insert_empty", nfixture, NULL, setup, test_insert_empty, teardown);
 	g_test_add("/list/insert_full", nfixture, NULL, setup, test_insert_full, teardown);
 	g_test_add("/list/insert_start", nfixture, NULL, setup_prefilled, test_insert_start, teardown);

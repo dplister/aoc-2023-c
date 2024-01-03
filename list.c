@@ -5,7 +5,13 @@
 
 int_list* new_int_list(int max) {
 	int_list *l = malloc(sizeof(int_list));
+	if (l == NULL)
+		return NULL;
 	l->ns = malloc(max * sizeof(int));
+	if (l->ns == NULL) {
+		free(l);
+		return NULL;
+	}
 	l->curr_len = 0;
 	l->max_len = max;
 	return l;
@@ -35,7 +41,7 @@ bool insert_number_sorted(int n, int_list *nums) {
 		return false;
 
 	int index = 0;
-	while (index < nums->max_len && nums->ns[index] < n)
+	while (index < nums->curr_len && nums->ns[index] < n)
 		index++;
 
 	int temp = nums->ns[index];
