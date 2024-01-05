@@ -176,8 +176,8 @@ int count_geared(int rows, int columns, char map[rows][columns]) {
 }
 
 int part_a(char *input) {
-	int rows = count_token(input, '\n');
-	int columns = index_of(input, '\n');
+	int rows = count_string_token(input, '\n');
+	int columns = char_index(input, '\n');
 	char map[rows][columns];
 	copy_map(rows, columns, map, input);
 	print_map(rows, columns, map);
@@ -185,8 +185,8 @@ int part_a(char *input) {
 }
 
 int part_b(char *input) {
-	int rows = count_token(input, '\n');
-	int columns = index_of(input, '\n');
+	int rows = count_string_token(input, '\n');
+	int columns = char_index(input, '\n');
 	char map[rows][columns];
 	copy_map(rows, columns, map, input);
 	print_map(rows, columns, map);

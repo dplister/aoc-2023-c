@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "list.h"
+#include "int_list.h"
 
 typedef struct {
 	int_list *ls;

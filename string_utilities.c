@@ -20,7 +20,7 @@ char *string_from_file(char const *filename){
 	return out;
 }
 
-bool in_list(char input, const char *tokens) {
+bool char_in_tokens(char input, const char *tokens) {
 	while (*tokens != '\0') {
 		if (*tokens == input)
 			return true;
@@ -37,8 +37,8 @@ bool is_symbol(char c) {
 	return !is_digit(c) && c != '.';
 }
 
-char* skip_to(char *input, const char *tokens) {
-	while (*input != '\0' && !in_list(*input, tokens)) {
+char* skip_to_tokens(char *input, const char *tokens) {
+	while (*input != '\0' && !char_in_tokens(*input, tokens)) {
 		input++;
 	}
 	return input;
@@ -50,7 +50,7 @@ char* skip_to_number(char *input) {
 	return input;
 }
 
-int count_token(char *input, char token) {
+int count_string_token(char *input, char token) {
 	int count = 0;
 	char *c = input;
 	while (*c != '\0') {
@@ -61,7 +61,7 @@ int count_token(char *input, char token) {
 	return count;
 }
 
-int index_of(char *input, char token) {
+int char_index(char *input, char token) {
 	int index = 0;
 	while (input[index] != '\0' && input[index] != token) {
 		index++;

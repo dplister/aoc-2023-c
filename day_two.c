@@ -17,20 +17,20 @@ int count_valid_games(char *input) {
 		input = skip_to_number(input);
 		int id = atoi(input);
 		printf("id: %d\t", id);
-		input = skip_to(input, GAME_DELIM);
+		input = skip_to_tokens(input, GAME_DELIM);
 		input++;
-		while (*input != '\0' && !in_list(*input, LINE_DELIM)) {
+		while (*input != '\0' && !char_in_tokens(*input, LINE_DELIM)) {
 			// number
 			int ball_total = atoi(input);
 			// colour
-			input = skip_to(input, COLOUR_DELIM);
+			input = skip_to_tokens(input, COLOUR_DELIM);
 			printf("%c:%d ", *input, ball_total);
 			if (*input == 'b' && ball_total > 14) { id = 0; }
 			if (*input == 'g' && ball_total > 13) { id = 0; }
 			if (*input == 'r' && ball_total > 12) { id = 0; }
 			// semicolon or comma or newline?
-			input = skip_to(input, DRAW_DELIM);
-			if (*input != '\0' && !in_list(*input, LINE_DELIM))
+			input = skip_to_tokens(input, DRAW_DELIM);
+			if (*input != '\0' && !char_in_tokens(*input, LINE_DELIM))
 				input++;
 		}
 		printf("valid? %d\n", id > 0 ? 1 : 0);
@@ -51,16 +51,16 @@ int power_valid_games(char *input) {
 		input = skip_to_number(input);
 		int id = atoi(input);
 		printf("id: %d\t", id);
-		input = skip_to(input, GAME_DELIM);
+		input = skip_to_tokens(input, GAME_DELIM);
 		input++;
 		int max_colours[colour_amount];
 		for (int i = 0;i < colour_amount;i++)
 			max_colours[i] = 0;
-		while (*input != '\0' && !in_list(*input, LINE_DELIM)) {
+		while (*input != '\0' && !char_in_tokens(*input, LINE_DELIM)) {
 			// number
 			int ball_total = atoi(input);
 			// colour
-			input = skip_to(input, colours);
+			input = skip_to_tokens(input, colours);
 			printf("%c:%d ", *input, ball_total);
 			int ci = 0;
 			while (colours[ci] != *input) {
@@ -68,8 +68,8 @@ int power_valid_games(char *input) {
 			}
 			max_colours[ci] = ball_total > max_colours[ci] ? ball_total : max_colours[ci];
 			// semicolon or comma or newline?
-			input = skip_to(input, DRAW_DELIM);
-			if (*input != '\0' && !in_list(*input, LINE_DELIM))
+			input = skip_to_tokens(input, DRAW_DELIM);
+			if (*input != '\0' && !char_in_tokens(*input, LINE_DELIM))
 				input++;
 		}
 		int sub_total = 1;
