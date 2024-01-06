@@ -1,7 +1,7 @@
 CFLAGS = -g -Wall -std=c2x `pkg-config --cflags glib-2.0`
 LDLIBS=`pkg-config --libs glib-2.0`
 CC=clang
-BINARIES=day_one day_two day_three day_four
+BINARIES=day_one day_two day_three day_four day_five
 TESTS=list_test
 
 all: $(BINARIES)
