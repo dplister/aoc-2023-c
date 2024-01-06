@@ -8,9 +8,8 @@
 const char *GAME_TOKENS = "0123456789|\n";
 const int MAX_NUM = 100;
 
-int calculate_wins(char *input) {
+void calculate_wins(char *input, int max_games, int scores[max_games]) {
 	uint8_t draws[MAX_NUM];
-	int score = 0;
 	while (*input != '\0') {
 		// clear existing draws
 		for (int i = 0; i < MAX_NUM;i++) {
@@ -18,7 +17,7 @@ int calculate_wins(char *input) {
 		}
 		// capture card details
 		input = skip_to_number(input);
-		// int cardNumber = atoi(input);
+		int card_number = atoi(input);
 		input = skip_to_tokens(input, " ");
 		// numbers until separator
 		input = skip_to_tokens(input, GAME_TOKENS);
@@ -48,27 +47,51 @@ int calculate_wins(char *input) {
 		}
 		if (*input == '\n')
 			input++;
-		// calculate individual score
-		if (match_counter == 1)
-			score += 1;
-		else
-			score += pow(2, match_counter - 1);
+		scores[card_number - 1] = match_counter; // games start at 1
 	}
-	return score;
 }
 
 int part_a(char *content) {
-	return calculate_wins(content);
+	int max_games = count_string_token(content, '\n');
+	int scores[max_games];
+	for (int i = 0;i < max_games;i++) { 
+		scores[i] = 0;
+	}
+	calculate_wins(content, max_games, scores);
+	int total_score = 0;
+	for (int i = 0;i < max_games;i++) {
+		if (scores[i] == 1)
+			total_score += 1;
+		else if (scores[i] > 1)
+			total_score += pow(2, scores[i] - 1);
+	}
+	return total_score;
 }
 
 int part_b(char *content) {
-	return calculate_wins(content);
+	int max_games = count_string_token(content, '\n');
+	int scores[max_games];
+	for (int i = 0;i < max_games;i++) { 
+		scores[i] = 0;
+	}
+	calculate_wins(content, max_games, scores);
+	int tickets[max_games];
+	// 1 original ticket for each game
+	for (int i = 0;i < max_games;i++) {
+		tickets[i] = 1;
+	}
+	int total_tickets = 0;
+	for (int i = 0;i < max_games;i++) {
+		int win_multiplier = tickets[i];
+		total_tickets += win_multiplier;
+		for (int s = 0; s < scores[i] && i + s + 1 < max_games; s++) {
+			tickets[i + s + 1] += win_multiplier;
+		}
+	}
+	return total_tickets;
 }
 
 int main(int argc, char **argv) {
-	printf("2 score: %d\n", (int)pow(2, 1));
-	printf("3 score: %d\n", (int)pow(2, 2));
-	printf("4 score: %d\n", (int)pow(2, 3));
 	char *contents;
 	if (argc > 2) {
 		contents = string_from_file(argv[2]);
