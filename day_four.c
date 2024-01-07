@@ -5,6 +5,8 @@
 #include <math.h>
 #include "string_utilities.h"
 
+typedef unsigned char uint8_t;
+
 const char *GAME_TOKENS = "0123456789|\n";
 const int MAX_NUM = 100;
 

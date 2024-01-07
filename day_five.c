@@ -62,6 +62,25 @@ void populate_map(char *content, int heading_index[HEADINGS], int rows, int mapp
 	}
 }
 
+int map_seed(int seed, int current_heading, int heading_index[HEADINGS], int lines, int mapping[lines][3]) {
+	if (current_heading == HEADINGS)
+		return seed;
+	int section_end = current_heading == HEADINGS - 1 ? lines : heading_index[current_heading + 1];
+	// see if seed maps to range
+	for (int i = heading_index[current_heading];i < section_end;i++) {
+		printf("Checking seed %d fits between %d and %d: ", seed, mapping[i][1], mapping[i][1] + mapping[i][2]);
+		if (seed >= mapping[i][1] && seed < mapping[i][1] + mapping[i][2]) {
+			int offset = seed - mapping[i][1];
+			printf("destination: \n");
+			return map_seed(mapping[i][0] + offset, current_heading + 1, heading_index, lines, mapping);
+		} else {
+			printf("no\n");
+		}
+	}
+	// didn't find it, direct mapping
+	return map_seed(seed, current_heading + 1, heading_index, lines, mapping);
+}
+
 int part_a(char *contents) {
 	// seeds
 	int seed_count = count_seeds(contents);
@@ -87,7 +106,13 @@ int part_a(char *contents) {
 		}
 		printf("%d %d %d\n", mappings[i][0], mappings[i][1], mappings[i][2]);
 	}
-	return -1;
+	// find smallest out of seed mappings
+	int min = -1;
+	for (int i = 0;i < 1;i++) {
+		int res = map_seed(seeds[i], 0, heading_index, lines, mappings);
+		min = min == -1 || res < min ? res : min;
+	}
+	return min;
 }
 
 int part_b(char *contents) {
